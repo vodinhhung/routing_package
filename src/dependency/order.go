@@ -1,8 +1,6 @@
 package dependency
 
 import (
-	"log"
-
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -20,19 +18,14 @@ type Order struct {
 
 var orderDB *gorm.DB
 
-func initOrderDB() {
+func InitOrderDB() error {
 	dsn := "user:password@tcp(127.0.0.1:3306)/your_db_name?parseTime=true"
 	var err error
 	orderDB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.Fatalf("Failed to connect to database: %v", err)
+		return err
 	}
-
-	// Auto-migrate schema
-	err = orderDB.AutoMigrate(&Order{})
-	if err != nil {
-		log.Fatalf("Auto migration failed: %v", err)
-	}
+	return nil
 }
 
 func GetOrdersByIDs(ids []uint64) ([]Order, error) {

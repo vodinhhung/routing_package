@@ -3,7 +3,6 @@ package dependency
 import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"log"
 )
 
 type Route struct {
@@ -16,31 +15,28 @@ type Route struct {
 
 var routeDB *gorm.DB
 
-func initRouteDB() {
+func InitRouteDB() error {
 	dsn := "user:password@tcp(127.0.0.1:3306)/your_db_name?parseTime=true"
 	var err error
 	routeDB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.Fatalf("Failed to connect to DB: %v", err)
+		return err
 	}
-
-	if err := routeDB.AutoMigrate(&Route{}); err != nil {
-		log.Fatalf("Migration failed: %v", err)
-	}
+	return nil
 }
 
 func GetRouteByID(routeID uint64) (*Route, error) {
 	var route Route
-	if err := orderDB.First(&route, routeID).Error; err != nil {
+	if err := routeDB.First(&route, routeID).Error; err != nil {
 		return nil, err
 	}
 	return &route, nil
 }
 
 func CreateRoute(r *Route) error {
-	return orderDB.Create(r).Error
+	return routeDB.Create(r).Error
 }
 
 func DeleteRoute(routeID uint64) error {
-	return orderDB.Delete(&Route{}, routeID).Error
+	return routeDB.Delete(&Route{}, routeID).Error
 }
