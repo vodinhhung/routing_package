@@ -10,7 +10,7 @@ func CreateNewRoute(route *dependency.Route) error {
 	if err != nil {
 		return err
 	}
-	finalOrderIds, cost, distance, time := findMinimumCost(inputOrderIds)
+	finalOrderIds, cost, distance, time := findMinimumCost(inputOrderIds, route.WarehouseAddrLatitude, route.WarehouseAddrLongitude)
 	route.OrderIds = utils.Uint64SliceToString(finalOrderIds)
 	route.Cost = cost
 	route.Distance = distance

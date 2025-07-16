@@ -42,3 +42,12 @@ func Uint64SliceToString(input []uint64) string {
 	}
 	return strings.Join(parts, ",")
 }
+
+func Float64ToString(f float64) string {
+	// Use 'f' format, with -1 precision to remove trailing zeroes
+	return strconv.FormatFloat(f, 'f', -1, 64)
+}
+
+func StringToFloat64(s string) (float64, error) {
+	return strconv.ParseFloat(s, 64)
+}
