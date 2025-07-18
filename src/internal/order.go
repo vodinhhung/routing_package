@@ -3,7 +3,12 @@ package internal
 import "routing/algorithm/src/dependency"
 
 func CreateNewOrder(order *dependency.Order) error {
-	err := dependency.CreateOrder(order)
+	_, err := dependency.GetClientByID(order.ClientID)
+	if err != nil {
+		return err
+	}
+
+	err = dependency.CreateOrder(order)
 	if err != nil {
 		return err
 	}

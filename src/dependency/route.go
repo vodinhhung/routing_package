@@ -3,9 +3,9 @@ package dependency
 type Route struct {
 	ID                     uint64  `gorm:"primaryKey;autoIncrement" json:"id"`
 	OrderIds               string  `json:"order_ids"`
-	Cost                   uint64  `json:"cost"`
-	Distance               uint64  `json:"distance"`
-	Time                   uint64  `json:"time"`
+	Cost                   float64 `json:"cost"`
+	Distance               float64 `json:"distance"`
+	Time                   float64 `json:"time"`
 	WarehouseAddrLongitude float64 `json:"warehouse_address_longitude"`
 	WarehouseAddrLatitude  float64 `json:"warehouse_addr_latitude"`
 }
