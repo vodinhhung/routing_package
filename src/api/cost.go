@@ -9,7 +9,7 @@ import (
 )
 
 func FindLowestCost(w http.ResponseWriter, r *http.Request) {
-	if err := validateRoute(w, r, http.MethodGet); err != nil {
+	if err := validate(w, r, &Args{methodType: http.MethodGet}, validateHttpMethod); err != nil {
 		return
 	}
 

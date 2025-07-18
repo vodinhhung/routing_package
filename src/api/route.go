@@ -2,7 +2,6 @@ package api
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"net/http"
 	"routing/algorithm/src/dependency"
@@ -10,18 +9,8 @@ import (
 	"strconv"
 )
 
-func validateRoute(w http.ResponseWriter, r *http.Request, expectedMethod string) error {
-	if r.Method != expectedMethod {
-		err := errors.New(fmt.Sprint("Method not allowed", http.StatusMethodNotAllowed))
-		http.Error(w, err.Error(), http.StatusMethodNotAllowed)
-		return err
-	}
-
-	return nil
-}
-
 func CreateRoute(w http.ResponseWriter, r *http.Request) {
-	if err := validateRoute(w, r, http.MethodPost); err != nil {
+	if err := validate(w, r, &Args{methodType: http.MethodPost}, validateHttpMethod); err != nil {
 		return
 	}
 
@@ -40,7 +29,7 @@ func CreateRoute(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetRoute(w http.ResponseWriter, r *http.Request) {
-	if err := validateRoute(w, r, http.MethodGet); err != nil {
+	if err := validate(w, r, &Args{methodType: http.MethodGet}, validateHttpMethod); err != nil {
 		return
 	}
 

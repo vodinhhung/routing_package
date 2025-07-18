@@ -14,14 +14,9 @@ func main() {
 }
 
 func initDependencies() {
-	err := dependency.InitOrderDB()
+	err := dependency.InitDb()
 	if err != nil {
-		log.Fatalf("Failed to connect to order database: %v", err)
-	}
-
-	err = dependency.InitRouteDB()
-	if err != nil {
-		log.Fatalf("Failed to connect to route database: %v", err)
+		log.Fatalf("Failed to connect to mysql database: %v", err)
 	}
 }
 

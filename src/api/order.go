@@ -2,7 +2,6 @@ package api
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"net/http"
 	"routing/algorithm/src/dependency"
@@ -10,24 +9,24 @@ import (
 	"strconv"
 )
 
-func validateOrder(w http.ResponseWriter, r *http.Request, expectedMethod string) error {
-	if r.Method != expectedMethod {
-		err := errors.New(fmt.Sprint("Method not allowed", http.StatusMethodNotAllowed))
-		http.Error(w, err.Error(), http.StatusMethodNotAllowed)
-		return err
-	}
-
-	return nil
-}
-
 func CreateOrder(w http.ResponseWriter, r *http.Request) {
-	if err := validateOrder(w, r, http.MethodPost); err != nil {
+	if err := validate(w, r, &Args{
+		methodType: http.MethodPost,
+	}, validateHttpMethod); err != nil {
 		return
 	}
 
 	var newOrder *dependency.Order
 	if err := json.NewDecoder(r.Body).Decode(newOrder); err != nil {
 		http.Error(w, "Invalid input", http.StatusBadRequest)
+		return
+	}
+
+	if err := validate(w, r, &Args{
+		methodType: http.MethodPost,
+		latitude:   newOrder.DeliveryLatitude,
+		longitude:  newOrder.DeliveryLongitude,
+	}, validateHttpMethod, validateLongitudeAndLatitude); err != nil {
 		return
 	}
 
@@ -40,7 +39,7 @@ func CreateOrder(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetOrder(w http.ResponseWriter, r *http.Request) {
-	if err := validateOrder(w, r, http.MethodGet); err != nil {
+	if err := validate(w, r, &Args{methodType: http.MethodGet}, validateHttpMethod); err != nil {
 		return
 	}
 
