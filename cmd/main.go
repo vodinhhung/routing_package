@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	initDependencies()
+	//initDependencies()
 	initEndpoints()
 	startServer()
 }
@@ -31,6 +31,12 @@ func initEndpoints() {
 	// Route endpoints
 	http.HandleFunc("/routes/new", api.CreateRoute)
 	http.HandleFunc("/routes/detail", api.GetRoute)
+
+	// Heath check endpoint
+	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("OK"))
+	})
 }
 
 func startServer() {
